@@ -1,0 +1,21 @@
+apiVersion: operator.istio.io/v1alpha1
+kind: Istio
+metadata:
+  name: multicluster
+  labels:
+    app.kubernetes.io/created-by: sailoperator
+    app.kubernetes.io/instance: multicluster
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: istio
+    app.kubernetes.io/part-of: sailoperator
+  namespace: istio-system
+spec:
+  values:
+    global:
+        meshID: mesh1
+        multiCluster:
+          clusterName: cluster2
+          enabled: true
+        network: cluster2-network
+  profile: openshift
+  version: latest
