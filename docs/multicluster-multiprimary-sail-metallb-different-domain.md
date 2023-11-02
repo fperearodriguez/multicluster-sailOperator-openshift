@@ -2,6 +2,11 @@
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 
+In the _scenario 1_, the default domain _cluster.local_ is the one used. In this case, each cluster has a different domain:
+
+- **cluster1** domain: cluster1.local
+- **cluster2** domain: cluster2.local
+
 ## Top-level architecture
 
 <img src="./images/toplevel_architecture.png" alt="Top-level architecture" width=60%>
@@ -66,51 +71,51 @@ Install Istio by executing:
 
 - Cluster1
 ```bash
-oc -n istio-system apply -f scenario-1/0-istio-setup/istio-cluster1.yaml
+oc -n istio-system apply -f 0-istio-setup/istio-cluster1.yaml
 ```
 
 - Cluster2
 ```bash
-oc -n istio-system apply -f scenario-1/0-istio-setup/istio-cluster2.yaml
+oc -n istio-system apply -f 0-istio-setup/istio-cluster2.yaml
 ```
 
 ## Deploy East-West gateways in both clusters
 
 - Cluster1:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network -n istio-gateways  -f scenario-1/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network -n istio-gateways  -f 1-multicluster/openshift-values.yaml
 ```
 
 - Cluster2:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network -n istio-gateways  -f scenario-1/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network -n istio-gateways  -f 1-multicluster/openshift-values.yaml
 ```
 
 ### Configure multicluster-multiprimary
 
 Both clusters:
 ```bash
-oc apply -f scenario-1/1-multicluster/gw.yaml
+oc apply -f 1-multicluster/gw.yaml
 ```
 
 - Cluster1:
 ```bash
-istioctl x create-remote-secret --name=cluster1 > scenario-1/1-multicluster/remote-secret-cluster2.yaml
+istioctl x create-remote-secret --name=cluster1 > 1-multicluster/remote-secret-cluster2.yaml
 ```
 
 - Cluster2:
 ```bash
-istioctl x create-remote-secret --name=cluster2 > scenario-1/1-multicluster/remote-secret-cluster1.yaml
+istioctl x create-remote-secret --name=cluster2 > 1-multicluster/remote-secret-cluster1.yaml
 ```
 
 - Cluster1:
 ```bash
-oc apply -f scenario-1/1-multicluster/remote-secret-cluster1.yaml
+oc apply -f 1-multicluster/remote-secret-cluster1.yaml
 ```
 
 - Cluster2:
 ```bash
-oc apply -f scenario-1/1-multicluster/remote-secret-cluster2.yaml
+oc apply -f 1-multicluster/remote-secret-cluster2.yaml
 ```
 
 ## Deploying the helloworld sample application
@@ -135,7 +140,7 @@ oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/hellowo
 
 Deploy the _sleep_ application:
 ```bash
-oc apply -f common/2-data-plane/sleep-app/deploy.yaml
+oc apply -f 2-data-plane/sleep-app/deploy.yaml
 ```
 
 ## Cleanup
