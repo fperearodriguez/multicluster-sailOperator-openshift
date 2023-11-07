@@ -7,11 +7,11 @@ In this case, each cluster has a different domain:
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
-:information_source: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
+:heavy_check_mark: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
 
-:information_source: Each service is added by creating Istio resources.
+:heavy_check_mark: Each service is added by creating Istio resources.
 
-:information_source: As additional information, each service is created with the suffix _.global_ 
+:heavy_check_mark: As additional information, each service is created with the suffix _.global_ 
   - i.e. _helloworld.global_
 
 ## Prerequisites
