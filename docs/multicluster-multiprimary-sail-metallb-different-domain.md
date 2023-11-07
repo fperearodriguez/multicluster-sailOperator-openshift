@@ -2,12 +2,17 @@
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 
-In the _scenario 1_, the default domain _cluster.local_ is the one used. In this case, each cluster has a different domain:
+In this case, each cluster has a different domain:
 
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
-WARNING: 
+:information_source: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
+
+:information_source: Each service is added by creating Istio resources.
+
+:information_source: As additional information, each service is created with the suffix _.global_ 
+  - i.e. _helloworld.global_
 
 ## Prerequisites
 - The same root of trust must be used in this use case. For this, follow the Istio [guide](https://istio.io/latest/docs/tasks/security/cert-management/plugin-ca-cert/).
