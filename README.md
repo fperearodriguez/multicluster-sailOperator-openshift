@@ -16,3 +16,7 @@ In the [Scenario 1](#scenario-1-istio-multicluster--multiprimary-on-openshift-vs
 - **cluster2** domain: cluster2.local
 
 Follow the specific [README](./docs/multicluster-multiprimary-sail-metallb-different-domain.md) for this scenario.
+
+## Author
+
+Fran Perea Rodríguez @RedHat

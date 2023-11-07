@@ -2,6 +2,12 @@
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 
+The same cluster domain is used in both clusters.
+
+## Prerequisites
+- The same root of trust must be used in this use case. For this, follow the Istio [guide](https://istio.io/latest/docs/tasks/security/cert-management/plugin-ca-cert/).
+- MetalLB installed.
+
 ## Top-level architecture
 
 <img src="./images/toplevel_architecture.png" alt="Top-level architecture" width=60%>
@@ -129,7 +135,6 @@ oc label namespace my-awesome-project istio-injection=enabled
 Deploy the _helloworld_ application:
 ```bash
 oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l version=v1 -n my-awesome-project
-oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l version=v2 -n my-awesome-project
 oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l service=helloworld -n my-awesome-project
 ```
 
@@ -147,3 +152,7 @@ oc delete istio multicluster -n istio-system
 oc delete project istio-gateways
 oc delete project istio-system
 ```
+
+## Author
+
+Fran Perea Rodríguez @RedHat

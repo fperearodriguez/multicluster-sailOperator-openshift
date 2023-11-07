@@ -7,6 +7,12 @@ In the _scenario 1_, the default domain _cluster.local_ is the one used. In this
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
+WARNING: 
+
+## Prerequisites
+- The same root of trust must be used in this use case. For this, follow the Istio [guide](https://istio.io/latest/docs/tasks/security/cert-management/plugin-ca-cert/).
+- - MetalLB installed.
+
 ## Top-level architecture
 
 <img src="./images/toplevel_architecture.png" alt="Top-level architecture" width=60%>
@@ -26,11 +32,13 @@ oc new-project istio-gateways
 - Cluster1
 ```bash
 oc label namespace istio-system topology.istio.io/network=cluster1-network
+oc label namespace istio-gateways istio-discovery=enabled
 ```
 
 - Cluster2
 ```bash
 oc label namespace istio-system topology.istio.io/network=cluster2-network
+oc label namespace istio-gateways istio-discovery=enabled
 ```
 
 Create CA and certificates.Open a new terminal, clone the Istio [repository](https://github.com/istio/istio) and go to _istio_ folder (new cloned repo). The steps must be executed from _istio_ folder.
@@ -71,51 +79,24 @@ Install Istio by executing:
 
 - Cluster1
 ```bash
-oc -n istio-system apply -f 0-istio-setup/istio-cluster1.yaml
+oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster1.yaml
 ```
 
 - Cluster2
 ```bash
-oc -n istio-system apply -f 0-istio-setup/istio-cluster2.yaml
+oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster2.yaml
 ```
 
 ## Deploy East-West gateways in both clusters
 
 - Cluster1:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network -n istio-gateways  -f 1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
 ```
 
 - Cluster2:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network -n istio-gateways  -f 1-multicluster/openshift-values.yaml
-```
-
-### Configure multicluster-multiprimary
-
-Both clusters:
-```bash
-oc apply -f 1-multicluster/gw.yaml
-```
-
-- Cluster1:
-```bash
-istioctl x create-remote-secret --name=cluster1 > 1-multicluster/remote-secret-cluster2.yaml
-```
-
-- Cluster2:
-```bash
-istioctl x create-remote-secret --name=cluster2 > 1-multicluster/remote-secret-cluster1.yaml
-```
-
-- Cluster1:
-```bash
-oc apply -f 1-multicluster/remote-secret-cluster1.yaml
-```
-
-- Cluster2:
-```bash
-oc apply -f 1-multicluster/remote-secret-cluster2.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
 ```
 
 ## Deploying the helloworld sample application
@@ -123,6 +104,7 @@ oc apply -f 1-multicluster/remote-secret-cluster2.yaml
 Create the _my-awesome-project_ OCP project:
 ```bash
 oc new-project my-awesome-project
+oc label namespace my-awesome-project istio-discovery=enabled
 ```
 
 Since we are using [Automatic Sidecar Injection](https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#automatic-sidecar-injection), label the _my-awesome-project_ OCP project:
@@ -134,14 +116,16 @@ oc label namespace my-awesome-project istio-injection=enabled
 Deploy the _helloworld_ application:
 ```bash
 oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l version=v1 -n my-awesome-project
-oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l version=v2 -n my-awesome-project
 oc apply -f https://raw.githubusercontent.com/istio/istio/master/samples/helloworld/helloworld.yaml -l service=helloworld -n my-awesome-project
 ```
 
 Deploy the _sleep_ application:
 ```bash
-oc apply -f 2-data-plane/sleep-app/deploy.yaml
+oc apply -f common/2-data-plane/sleep-app/deploy.yaml
 ```
+
+## Expose services
+
 
 ## Cleanup
 Run in both clusters:
@@ -152,3 +136,7 @@ oc delete istio multicluster -n istio-system
 oc delete project istio-gateways
 oc delete project istio-system
 ```
+
+## Author
+
+Fran Perea Rodríguez @RedHat
