@@ -1,0 +1,32 @@
+apiVersion: operator.istio.io/v1alpha1
+kind: Istio
+metadata:
+  name: multicluster
+  labels:
+    app.kubernetes.io/created-by: sailoperator
+    app.kubernetes.io/instance: multicluster
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: istio
+    app.kubernetes.io/part-of: sailoperator
+  namespace: istio-system
+spec:
+  values:
+    global:
+        meshID: mesh1
+        multiCluster:
+          clusterName: cluster1
+          enabled: true
+        network: cluster1-network
+    meshConfig:
+      enableAutoMtls: true
+      defaultConfig:
+        proxyMetadata:
+          ISTIO_META_DNS_CAPTURE: "true"
+          ISTIO_META_DNS_AUTO_ALLOCATE: "true"
+      discoverySelectors:
+        - matchLabels:
+            istio-discovery: enabled
+      trustDomain: cluster1.local
+      trustDomainAliases: ["cluster1.local", "cluster2.local"]
+  profile: openshift
+  version: latest

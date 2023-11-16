@@ -1,4 +1,4 @@
-# Istio multicluster & multiprimary with Sail Operator - OpenShift
+# Istio multicluster & multiprimary with Sail Operator - OpenShift. Different cluster domain.
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 
@@ -7,16 +7,13 @@ In this case, each cluster has a different domain:
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
-:heavy_check_mark: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
-
-:heavy_check_mark: Each service is added by creating Istio resources.
-
-:heavy_check_mark: As additional information, each service is created with the suffix _.global_ 
-  - i.e. _helloworld.global_
+To configure the trust between both clusters the **_trustDomainAliases_** option is used. You can find more information about _trustDomainAliases_ in the following links:
+* [Pilot bundle](https://github.com/istio/istio/blob/7905ae0c4fecb3ee6c7abad6fc20f7e120347e81/pilot/pkg/security/trustdomain/bundle.go#L28)
+* [Authz migration](https://istio.io/latest/docs/tasks/security/authorization/authz-td-migration/#migrate-trust-domain-with-trust-domain-aliases)
 
 ## Prerequisites
 - The same root of trust must be used in this use case. For this, follow the Istio [guide](https://istio.io/latest/docs/tasks/security/cert-management/plugin-ca-cert/).
-- - MetalLB installed.
+- MetalLB installed.
 
 ## Top-level architecture
 
@@ -37,13 +34,11 @@ oc new-project istio-gateways
 - Cluster1
 ```bash
 oc label namespace istio-system topology.istio.io/network=cluster1-network
-oc label namespace istio-gateways istio-discovery=enabled
 ```
 
 - Cluster2
 ```bash
 oc label namespace istio-system topology.istio.io/network=cluster2-network
-oc label namespace istio-gateways istio-discovery=enabled
 ```
 
 Create CA and certificates.Open a new terminal, clone the Istio [repository](https://github.com/istio/istio) and go to _istio_ folder (new cloned repo). The steps must be executed from _istio_ folder.
@@ -96,12 +91,39 @@ oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster2.yaml
 
 - Cluster1:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
 ```
 
 - Cluster2:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
+```
+
+### Configure multicluster-multiprimary
+
+Both clusters:
+```bash
+oc apply -f scenario-2/1-multicluster/gw.yaml
+```
+
+- Cluster1:
+```bash
+istioctl x create-remote-secret --name=cluster1 > scenario-2/1-multicluster/remote-secret-cluster2.yaml
+```
+
+- Cluster2:
+```bash
+istioctl x create-remote-secret --name=cluster2 > scenario-2/1-multicluster/remote-secret-cluster1.yaml
+```
+
+- Cluster1:
+```bash
+oc apply -f scenario-2/1-multicluster/remote-secret-cluster1.yaml
+```
+
+- Cluster2:
+```bash
+oc apply -f scenario-2/1-multicluster/remote-secret-cluster2.yaml
 ```
 
 ## Deploying the helloworld sample application
@@ -109,7 +131,6 @@ helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-n
 Create the _my-awesome-project_ OCP project:
 ```bash
 oc new-project my-awesome-project
-oc label namespace my-awesome-project istio-discovery=enabled
 ```
 
 Since we are using [Automatic Sidecar Injection](https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#automatic-sidecar-injection), label the _my-awesome-project_ OCP project:
@@ -128,9 +149,6 @@ Deploy the _sleep_ application:
 ```bash
 oc apply -f common/2-data-plane/sleep-app/deploy.yaml
 ```
-
-## Expose services
-
 
 ## Cleanup
 Run in both clusters:

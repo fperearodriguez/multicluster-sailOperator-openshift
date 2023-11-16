@@ -143,6 +143,12 @@ Deploy the _sleep_ application:
 oc apply -f common/2-data-plane/sleep-app/deploy.yaml
 ```
 
+### Testing federated clusters
+Run from both clusters multiple http calls from the _sleep_ pod to the _helloworld.my-awesome-project.svc.cluster.local_ destination service:
+```bash
+oc exec <sleep-POD> -- curl -sS helloworld.my-awesome-project.svc.cluster.local:5000/hello
+```
+
 ## Cleanup
 Run in both clusters:
 ```bash
