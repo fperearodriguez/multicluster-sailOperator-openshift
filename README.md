@@ -4,7 +4,7 @@
 Use cases:
 
 1. [Istio multicluster \& multiprimary](#scenario-1-istio-multicluster--multiprimary-on-openshift-cluster-domain-set-as-clusterlocal)
-2. [Istio multicluster \& multiprimary with different cluster domain](#scenario-2-istio-multicluster--multiprimary-on-openshift-cluster-domain-different-per-cluster)
+2. [Istio multicluster \& multiprimary with different cluster domain](#scenario-2-istio-multicluster--multiprimary-on-openshift-cluster-domain-different-per-cluster-exposing-all-services-automatically)
 3. [Istio multicluster \& multiprimary. Custom service discovery instead of automatic service discovery](#scenario-3-istio-multicluster--multiprimary-on-openshift-cluster-domain-different-per-cluster-adding-custom-services-instead-of-automatic-service-discovery)
 
 
