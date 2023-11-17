@@ -7,12 +7,11 @@ In this case, each cluster has a different domain:
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
-:heavy_check_mark: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
+> :heavy_check_mark: In this use case, there is no visibility with the Kubernetes API of the remote cluster.
 
-:heavy_check_mark: Each service is added by creating Istio resources.
+> :heavy_check_mark: Each service is added by creating Istio resources.
 
-:heavy_check_mark: As additional information, each service is created with the suffix _.global_ 
-  - i.e. _helloworld.global_
+> :heavy_check_mark: As additional information, each service is created with the suffix _.global_ - i.e. _helloworld.global_
 
 ## Prerequisites
 - The same root of trust must be used in this use case. For this, follow the Istio [guide](https://istio.io/latest/docs/tasks/security/cert-management/plugin-ca-cert/).
@@ -84,24 +83,24 @@ Install Istio by executing:
 
 - Cluster1
 ```bash
-oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster1.yaml
+oc -n istio-system apply -f scenario-3/0-istio-setup/istio-cluster1.yaml
 ```
 
 - Cluster2
 ```bash
-oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster2.yaml
+oc -n istio-system apply -f scenario-3/0-istio-setup/istio-cluster2.yaml
 ```
 
 ## Deploy East-West gateways in both clusters
 
 - Cluster1:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-3/1-multicluster/openshift-values.yaml
 ```
 
 - Cluster2:
 ```bash
-helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
+helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network --set env.ISTIO_META_ROUTER_MODE="sni-dnat" -n istio-gateways  -f scenario-3/1-multicluster/openshift-values.yaml
 ```
 
 ## Deploying the helloworld sample application
@@ -130,7 +129,11 @@ oc apply -f common/2-data-plane/sleep-app/deploy.yaml
 ```
 
 ## Expose services
+In this use case, each custom service is added to each cluster by creating some Istio resources. As an example, a custom service **__helloworld.global__** is added in both clusters:
 
+<img src="./images/0-scenario-3.png" alt="helloworld.global service added in both clusters" width=60%>
+
+At this point, you can reach the _helloworld.global_ service in both clusters, and the traffic will be distributed between the clusters.
 
 ## Cleanup
 Run in both clusters:

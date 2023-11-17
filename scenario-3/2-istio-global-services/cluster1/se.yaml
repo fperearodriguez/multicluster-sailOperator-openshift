@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: helloworld-global
+  namespace: my-awesome-project
+spec:
+  exportTo:
+  - my-awesome-project
+  - istio-gateways
+  hosts:
+  - helloworld.global
+  location: MESH_INTERNAL
+  ports:
+  - name: http-5000
+    number: 5000
+    protocol: HTTP
+    targetPort: 5000
+  resolution: STATIC
+  subjectAltNames:
+  - spiffe://cluster1.local/ns/my-awesome-project/sa/default
+  - spiffe://cluster2.local/ns/my-awesome-project/sa/default
+  workloadSelector:
+    labels:
+      app: helloworld

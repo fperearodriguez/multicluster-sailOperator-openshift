@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: helloworld-my-awesome-project-cluster1-global
+  namespace: istio-gateways
+spec:
+  exportTo:
+  - .
+  gateways:
+  - mesh
+  hosts:
+  - helloworld.my-awesome-project.svc.cluster.local
+  http:
+  - match:
+    - uri:
+        prefix: /
+    name: helloworld.my-awesome-project.cluster1
+    route:
+    - destination:
+        host: helloworld.global
+        port:
+          number: 5000

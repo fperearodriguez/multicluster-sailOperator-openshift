@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: WorkloadEntry
+metadata:
+  name: helloworld-global
+  namespace: my-awesome-project
+spec:
+  address: 192.168.48.200
+  labels:
+    app: helloworld
+    security.istio.io/tlsMode: istio
+  locality: east
+  ports:
+    http-5000: 15443

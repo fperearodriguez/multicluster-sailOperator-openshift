@@ -23,7 +23,7 @@ In this scenario, the cluster domain is different per cluster:
 - **cluster1** domain: cluster1.local
 - **cluster2** domain: cluster2.local
 
-> :warning: **With this setup, both cluster domains should be considered the same as the trustdomain**: You can **not** differentiate the cluster domain when using _spiffe_. For instance, by applying an AuthorizationPolicy, you can not trust only a cluster, both are trusted. See the following [issue](https://github.com/istio/istio/issues/39204) for more information.
+> :warning: **With this setup, both cluster domains should be considered the same as the trustdomain**: You can **not** differentiate the cluster domain when using the _spiffe id_. For instance, by applying an AuthorizationPolicy, you can not trust only a cluster, both are trusted. See the following [issue](https://github.com/istio/istio/issues/39204) for more information.
 
 Follow the specific [README](./docs/multicluster-multiprimary-sail-metallb-scenario-2.md) for this scenario.
 
@@ -41,7 +41,7 @@ Each custom service is added to the cluster by using the following Istio resourc
 * [Workload Entry](https://istio.io/latest/docs/reference/config/networking/workload-entry/)
 * [Gateway](https://istio.io/latest/docs/reference/config/networking/gateway/)
 
-> :warning: **With this setup, only the _spiffe id_ used in the Istio resources is trusted**: In this use case, you can differentiate the cluster domain when using _spiffe_.
+> :warning: **With this setup, only the _spiffe id_ used in the Istio resources is trusted**: In this use case, you can differentiate the cluster domain when using the _spiffe id_.
 
 Follow the specific [README](./docs/multicluster-multiprimary-sail-metallb-scenario-3.md) for this scenario.
 
