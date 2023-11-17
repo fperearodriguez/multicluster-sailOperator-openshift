@@ -1,4 +1,4 @@
-# Istio multicluster & multiprimary with Sail Operator - OpenShift. Different cluster domain. Adding custom services instead of automatic service discovery
+# Istio multicluster & multiprimary - Different cluster domain with custom services
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 

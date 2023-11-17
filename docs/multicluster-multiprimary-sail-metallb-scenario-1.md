@@ -1,4 +1,4 @@
-# Istio multicluster & multiprimary with Sail Operator - OpenShift
+# Istio multicluster & multiprimary
 
 Installing Istio with Sail Operator on OpenShift (vSphere).
 

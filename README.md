@@ -3,18 +3,21 @@
 
 Use cases:
 
-1. [Istio multicluster \& multiprimary](#scenario-1-istio-multicluster--multiprimary-on-openshift-cluster-domain-set-as-clusterlocal)
-2. [Istio multicluster \& multiprimary with different cluster domain](#scenario-2-istio-multicluster--multiprimary-on-openshift-cluster-domain-different-per-cluster-exposing-all-services-automatically)
-3. [Istio multicluster \& multiprimary. Custom service discovery instead of automatic service discovery](#scenario-3-istio-multicluster--multiprimary-on-openshift-cluster-domain-different-per-cluster-adding-custom-services-instead-of-automatic-service-discovery)
+1. [Istio multicluster \& multiprimary](#scenario-1)
+2. [Istio multicluster \& multiprimary with different cluster domain](#scenario-2)
+3. [Istio multicluster \& multiprimary. Custom service discovery instead of automatic service discovery](#scenario-3)
 
+---
 
-## Scenario 1: Istio multicluster & multiprimary on OpenShift. Cluster domain set as _cluster.local_
+## Scenario 1
+### Istio multicluster & multiprimary on OpenShift. Cluster domain set as _cluster.local_
 
 In this scenario, Istio is installed via [Sail Operator](https://github.com/maistra/istio-operator/blob/maistra-3.0/bundle/README.md). The deployment model is [Multi-Primary on different networks](https://istio.io/latest/docs/setup/install/multicluster/multi-primary_multi-network/).
 
 Follow the specific [README](./docs/multicluster-multiprimary-sail-metallb-scenario-1.md) for this scenario.
 
-## Scenario 2: Istio multicluster & multiprimary on OpenShift. Cluster domain different per cluster. Exposing all services automatically
+## Scenario 2
+### Istio multicluster & multiprimary on OpenShift. Cluster domain different per cluster. Exposing all services automatically
 
 In this scenario, Istio is installed via [Sail Operator](https://github.com/maistra/istio-operator/blob/maistra-3.0/bundle/README.md). The deployment model is [Multi-Primary on different networks](https://istio.io/latest/docs/setup/install/multicluster/multi-primary_multi-network/).
 
@@ -27,7 +30,8 @@ In this scenario, the cluster domain is different per cluster:
 
 Follow the specific [README](./docs/multicluster-multiprimary-sail-metallb-scenario-2.md) for this scenario.
 
-## Scenario 3: Istio multicluster & multiprimary on OpenShift. Cluster domain different per cluster. Adding custom services instead of automatic service discovery
+## Scenario 3
+### Istio multicluster & multiprimary on OpenShift. Cluster domain different per cluster. Adding custom services instead of automatic service discovery
 
 In this scenario, Istio is installed via [Sail Operator](https://github.com/maistra/istio-operator/blob/maistra-3.0/bundle/README.md). The deployment model is [Multi-Primary on different networks](https://istio.io/latest/docs/setup/install/multicluster/multi-primary_multi-network/).
 
