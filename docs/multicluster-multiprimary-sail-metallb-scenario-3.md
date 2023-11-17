@@ -91,7 +91,7 @@ oc -n istio-system apply -f scenario-3/0-istio-setup/istio-cluster1.yaml
 oc -n istio-system apply -f scenario-3/0-istio-setup/istio-cluster2.yaml
 ```
 
-## Deploy East-West gateways in both clusters
+## Deploying East-West gateways in both clusters
 
 - Cluster1:
 ```bash
@@ -128,7 +128,7 @@ Deploy the _sleep_ application:
 oc apply -f common/2-data-plane/sleep-app/deploy.yaml
 ```
 
-## Expose services
+## Exposing services
 In this use case, each custom service is added to each cluster by creating some Istio resources. As an example, a custom service **__helloworld.global__** is added in both clusters:
 
 <img src="./images/0-scenario-3.png" alt="helloworld.global service added in both clusters" width=60%>

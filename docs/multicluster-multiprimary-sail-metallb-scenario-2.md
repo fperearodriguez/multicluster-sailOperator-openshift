@@ -87,7 +87,7 @@ oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster1.yaml
 oc -n istio-system apply -f scenario-2/0-istio-setup/istio-cluster2.yaml
 ```
 
-## Deploy East-West gateways in both clusters
+## Deploying East-West gateways in both clusters
 
 - Cluster1:
 ```bash
@@ -99,7 +99,7 @@ helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster1-n
 helm install istio-eastwestgateway istio/gateway --set networkGateway=cluster2-network -n istio-gateways  -f scenario-2/1-multicluster/openshift-values.yaml
 ```
 
-### Configure multicluster-multiprimary
+### Configuring multicluster-multiprimary
 
 Both clusters:
 ```bash
