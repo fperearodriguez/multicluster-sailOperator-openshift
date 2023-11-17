@@ -133,7 +133,7 @@ In this use case, each custom service is added to each cluster by creating some 
 
 <img src="./images/0-scenario-3.png" alt="helloworld.global service added in both clusters" width=60%>
 
-At this point, you can reach the _helloworld.global_ service in both clusters, and the traffic will be distributed between the clusters.
+At this point, you can reach the _helloworld.global_ service in both clusters, and the traffic will be distributed between the clusters. Those resources are located in the [2-istio-global-services](../scenario-3/2-istio-global-services/) folder.
 
 ## Cleanup
 Run in both clusters:
